@@ -22,6 +22,7 @@ func init() {
 		{"-d", 10, parseBodyASCII, &extract{re: "^-d +(.+)", execute: extractData}},
 		{"-u", 15, parseUser, &extract{re: "^-u +(.+)", execute: extractData}},
 		{"-k", 15, parseInsecure, nil},
+		{"--request", 10, parseRequestMethod, nil},
 		// Body
 		{"--data", 10, parseBodyASCII, &extract{re: "--data +(.+)", execute: extractData}},
 		{"--data-urlencode", 10, parseBodyURLEncode, &extract{re: "--data-urlencode +(.+)", execute: extractData}},
@@ -139,6 +140,12 @@ func parseOptI(u *CURL, soption string) {
 
 func parseOptX(u *CURL, soption string) {
 	matches := regexp.MustCompile("-X +(.+)").FindStringSubmatch(soption)
+	method := strings.Trim(matches[1], "'")
+	u.Method = method
+}
+
+func parseRequestMethod(u *CURL, soption string) {
+	matches := regexp.MustCompile("--request +(.+)").FindStringSubmatch(soption)
 	method := strings.Trim(matches[1], "'")
 	u.Method = method
 }
