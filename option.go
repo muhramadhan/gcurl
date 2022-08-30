@@ -23,6 +23,9 @@ func init() {
 		{"-u", 15, parseUser, &extract{re: "^-u +(.+)", execute: extractData}},
 		{"-k", 15, parseInsecure, nil},
 		{"--request", 10, parseRequestMethod, nil},
+		// Form
+		{"--form", 10, parseForm, nil},
+		{"-F", 10, parseForm, nil},
 		// Body
 		{"--data", 10, parseBodyASCII, &extract{re: "--data +(.+)", execute: extractData}},
 		{"--data-urlencode", 10, parseBodyURLEncode, &extract{re: "--data-urlencode +(.+)", execute: extractData}},
@@ -247,5 +250,14 @@ func parseHeader(u *CURL, soption string) {
 	default:
 		u.Header.Add(key, value)
 	}
+
+}
+
+func parseForm(u *CURL, soption string) {
+	matches := regexp.MustCompile(`['"]([^:]+): ([^'"]+)['"]`).FindAllStringSubmatch(soption, 1)[0]
+	key := matches[1]
+	value := matches[2]
+
+	u.FormData.Add(key, value)
 
 }

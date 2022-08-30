@@ -22,6 +22,7 @@ type CURL struct {
 
 	ContentType string
 	Body        *bytes.Buffer
+	FormData    http.Header
 
 	Auth     *requests.BasicAuth
 	Timeout  int // second
