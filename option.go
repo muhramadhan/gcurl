@@ -257,5 +257,5 @@ func parseForm(u *CURL, soption string) {
 	matches := regexp.MustCompile(`['"]([^:]+)=["']([^'"]+)['"]['"]`).FindAllStringSubmatch(soption, 1)[0]
 	key := matches[1]
 	value := matches[2]
-	u.FormData[key] = append(u.FormData[key], value)
+	u.FormData[key] = []string{value}
 }
